@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de iPhone</title>
+  <style>
+    /* Estilo geral */
+    body {
+      margin: 0;
+      font-family: 'San Francisco', Arial, sans-serif;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .iphone {
+      width: 375px;
+      height: 812px;
+      margin: 50px auto;
+      border-radius: 40px;
+      background-color: #fff;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Tela de bloqueio */
+    .lock-screen {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #1c1c1e, #3a3a3c);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .lock-screen.hidden {
+      top: -100%;
+    }
+
+    .lock-screen h1 {
+      font-size: 72px;
+      margin: 0;
+    }
+
+    .lock-screen p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .lock-screen .slide-to-unlock {
+      margin-top: 50px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.7;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* Tela inicial */
+    .home-screen {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #d1e3f8, #a3cde8);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      padding: 20px;
+      box-sizing: border-box;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .app-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 15px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .app-icon:hover {
+      transform: scale(1.1);
+    }
+
+    /* Tela de aplicativo */
+    .app-screen {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 20;
+    }
+
+    .app-screen.active {
+      display: flex;
+    }
+
+    .app-screen .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 15px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .app-screen h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="iphone">
+    <!-- Tela de Bloqueio -->
+    <div class="lock-screen" id="lockScreen">
+      <h1>12:45</h1>
+      <p>Terça-feira, 19 de Agosto</p>
+      <div class="slide-to-unlock" onclick="unlockPhone()">Deslize para desbloquear</div>
+    </div>
+
+    <!-- Tela Inicial (Home Screen) -->
+    <div class="home-screen" id="homeScreen">
+      <div class="app-icon" onclick="openApp('whatsapp')">WhatsApp</div>
+      <div class="app-icon" onclick="openApp('photos')">Fotos</div>
+      <div class="app-icon" onclick="openApp('notes')">Notas</div>
+      <div class="app-icon" onclick="openApp('calls')">Chamadas</div>
+      <div class="app-icon" onclick="openApp('settings')">Ajustes</div>
+    </div>
+
+    <!-- Tela de Aplicativo -->
+    <div class="app-screen" id="appScreen">
+      <button class="back-button" onclick="goHome()">Voltar</button>
+      <h2 id="appTitle">App</h2>
+      <p id="appContent">Conteúdo do aplicativo.</p>
+    </div>
+  </div>
+
+  <script>
+    function unlockPhone() {
+      const lockScreen = document.getElementById('lockScreen');
+      lockScreen.classList.add('hidden');
+    }
+
+    function openApp(app) {
+      const appScreen = document.getElementById('appScreen');
+      const appTitle = document.getElementById('appTitle');
+      const appContent = document.getElementById('appContent');
+
+      appScreen.classList.add('active');
+
+      if (app === 'whatsapp') {
+        appTitle.innerHTML = 'WhatsApp';
+        appContent.innerHTML = 'Mensagens aqui...';
+      } else if (app === 'photos') {
+        appTitle.innerHTML = 'Fotos';
+        appContent.innerHTML = 'Galeria de imagens...';
+      } else if (app === 'notes') {
+        appTitle.innerHTML = 'Notas';
+        appContent.innerHTML = 'Suas anotações...';
+      } else if (app === 'calls') {
+        appTitle.innerHTML = 'Chamadas';
+        appContent.innerHTML = 'Histórico de chamadas...';
+      } else if (app === 'settings') {
+        appTitle.innerHTML = 'Ajustes';
+        appContent.innerHTML = 'Configurações do sistema...';
+      }
+    }
+
+    function goHome() {
+      const appScreen = document.getElementById('appScreen');
+      appScreen.classList.remove('active');
+    }
+  </script>
+</body>
+</html>
